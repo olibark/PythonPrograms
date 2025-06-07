@@ -5,7 +5,7 @@ import requests
 API_URL = "https://api-inference.huggingface.co/models/deepseek-ai/deepseek-llm-7b-instruct"
 
 # Read the Hugging Face token from the environment, if provided
-HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
+HF_TOKEN = os.getenv("HF_TOKEN")
 headers = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
 
 
