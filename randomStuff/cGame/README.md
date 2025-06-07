@@ -7,13 +7,21 @@ This folder contains a simple number guessing game in C.
 
 ## Building
 
-To build the GUI version you need GTK 3 development libraries.
+You can use the included `Makefile` for a simpler build process:
 
 ```
-# compile terminal version
+make        # build the terminal version (./guess)
+make gui    # build the GUI version (requires GTK 3)
+make clean  # remove generated binaries
+```
+
+If you prefer to compile manually, use:
+
+```
+# terminal version
 gcc guess.c -o guess
 
-# compile GUI version (requires gtk3)
+# GUI version (requires gtk3)
 gcc guess_gui.c -o guess_gui $(pkg-config --cflags --libs gtk+-3.0)
 ```
 
