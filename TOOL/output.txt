@@ -1,0 +1,5 @@
+SDL2/SDL.h
+SDL2/SDL_image.h
+SDL2/SDL_ttf.h
+stdlib.h
+time.h

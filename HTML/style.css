@@ -1,0 +1,66 @@
+/* style.css - Basic CSS styling for main.html */
+
+/* Set a light grey background and overall font styling */
+body {
+    background-color: #000000;
+    border: #FF5733;
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    color: #d98f8f;
+}
+form {
+    margin: 1000 auto;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 5px;
+}
+/* Style the header */
+h1 {
+    color: #007BFF; /* Blue header */
+    text-align: center;
+    margin: 0 0 20px;
+}
+
+/* Style links */
+button {
+    background-color: #000000; /* Orange button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+a {
+    color: #FF5733; /* Orange link */
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* Style paragraphs */
+p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
+/* Style custom tag (e.g., <tagname>) */
+tagname {
+    color: #28a745; /* Green text for the custom element */
+    font-weight: bold;
+}
+
+/* Add a border and some spacing to images */
+img {
+    border: 2px solid #ddd;
+    padding: 5px;
+    margin: 10px 0;
+}

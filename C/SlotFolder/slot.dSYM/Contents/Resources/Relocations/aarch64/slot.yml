@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/oliverbarkham/Documents/Python_programs/c_programs/SlotFolder/slot'
+relocations:     []
+...

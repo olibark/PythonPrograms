@@ -1,0 +1,1 @@
+redCircle.png
