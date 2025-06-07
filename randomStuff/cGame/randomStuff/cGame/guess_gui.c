@@ -1,8 +1,3 @@
-/cGame/guess_gui.c
-New
-+51
--0
-
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <time.h>
