@@ -2,6 +2,7 @@ import pygame
 import math
 import time
 import random
+
 # Initialize pygame
 pygame.init()
 
@@ -16,6 +17,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+ORANGE = (255, 128, 0)
 
 # Player settings
 PLAYER_SIZE = 30
@@ -24,7 +26,14 @@ player_pos = pygame.Vector2(WIDTH // 2, HEIGHT // 2)
 
 MISSILE_SIZE = 10
 MISSILE_SPEED = random.uniform(1, 3)  # Random speed for missiles
-missiles = [pygame.Vector2(WIDTH // 2, HEIGHT - 50)]  # Start with one missile
+MISSILE_LIFETIME = 15  # seconds
+EXPLOSION_RADIUS = 60  # pixels
+
+# Store each missile as a dict with position and spawn_time
+missiles = [{
+    "pos": pygame.Vector2(WIDTH // 2, HEIGHT - 50),
+    "spawn_time": time.time()
+}]
 
 # Game state
 running = True
@@ -37,6 +46,9 @@ def draw_player(pos):
 
 def draw_missile(pos):
     pygame.draw.circle(screen, RED, (int(pos.x), int(pos.y)), MISSILE_SIZE)
+
+def draw_explosion(pos):
+    pygame.draw.circle(screen, ORANGE, (int(pos.x), int(pos.y)), EXPLOSION_RADIUS, 4)
 
 while running:
     for event in pygame.event.get():
@@ -60,27 +72,43 @@ while running:
     # Add a new missile every 10 seconds
     current_time = time.time()
     if current_time >= next_missile_time:
-        missiles.append(pygame.Vector2(WIDTH // 2, HEIGHT - 50))
+        missiles.append({
+            "pos": pygame.Vector2(WIDTH // 2, HEIGHT - 50),
+            "spawn_time": current_time
+        })
         next_missile_time += 10
-
-    # Homing missile movement for all missiles
-    for missile_pos in missiles:
-        direction = player_pos + pygame.Vector2(PLAYER_SIZE / 2, PLAYER_SIZE / 2) - missile_pos
-        if direction.length() != 0:
-            direction = direction.normalize() * random.uniform(MISSILE_SPEED, MISSILE_SPEED * 1.5)  # Randomize speed slightly
-        missile_pos += direction
 
     screen.fill(BLACK)
     draw_player(player_pos)
-    for missile_pos in missiles:
-        draw_missile(missile_pos)
 
-    # Collision detection for all missiles
+    # Missile movement and explosion logic
     hit = False
-    for missile_pos in missiles:
-        if missile_pos.distance_to(player_pos + pygame.Vector2(PLAYER_SIZE / 2, PLAYER_SIZE / 2)) < PLAYER_SIZE / 2 + MISSILE_SIZE:
-            hit = True
-            break
+    player_center = player_pos + pygame.Vector2(PLAYER_SIZE / 2, PLAYER_SIZE / 2)
+    exploded_missiles = []
+
+    for missile in missiles:
+        missile_age = current_time - missile["spawn_time"]
+        if missile_age >= MISSILE_LIFETIME:
+            # Draw explosion
+            draw_explosion(missile["pos"])
+            # Check if player is in explosion radius
+            if missile["pos"].distance_to(player_center) < EXPLOSION_RADIUS:
+                hit = True
+            exploded_missiles.append(missile)
+        else:
+            # Move missile
+            direction = player_center - missile["pos"]
+            if direction.length() != 0:
+                direction = direction.normalize() * random.uniform(MISSILE_SPEED, MISSILE_SPEED * 1.5)
+            missile["pos"] += direction
+            draw_missile(missile["pos"])
+            # Direct collision with missile
+            if missile["pos"].distance_to(player_center) < PLAYER_SIZE / 2 + MISSILE_SIZE:
+                hit = True
+
+    # Remove exploded missiles
+    for missile in exploded_missiles:
+        missiles.remove(missile)
 
     if hit:
         text = font.render("Game Over", True, WHITE)
