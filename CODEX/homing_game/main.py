@@ -1,6 +1,7 @@
 import pygame
 import math
-
+import time
+import random
 # Initialize pygame
 pygame.init()
 
@@ -21,14 +22,15 @@ PLAYER_SIZE = 30
 PLAYER_SPEED = 5
 player_pos = pygame.Vector2(WIDTH // 2, HEIGHT // 2)
 
-# Missile settings
 MISSILE_SIZE = 10
-MISSILE_SPEED = 3
-missile_pos = pygame.Vector2(WIDTH // 2, HEIGHT - 50)
+MISSILE_SPEED = random.uniform(1, 3)  # Random speed for missiles
+missiles = [pygame.Vector2(WIDTH // 2, HEIGHT - 50)]  # Start with one missile
 
 # Game state
 running = True
 font = pygame.font.SysFont(None, 48)
+start_time = time.time()
+next_missile_time = start_time + 10  # First extra missile after 10 seconds
 
 def draw_player(pos):
     pygame.draw.rect(screen, GREEN, (pos.x, pos.y, PLAYER_SIZE, PLAYER_SIZE))
@@ -55,18 +57,32 @@ while running:
     player_pos.x = max(0, min(WIDTH - PLAYER_SIZE, player_pos.x))
     player_pos.y = max(0, min(HEIGHT - PLAYER_SIZE, player_pos.y))
 
-    # Homing missile movement
-    direction = player_pos + pygame.Vector2(PLAYER_SIZE / 2, PLAYER_SIZE / 2) - missile_pos
-    if direction.length() != 0:
-        direction = direction.normalize() * MISSILE_SPEED
-    missile_pos += direction
+    # Add a new missile every 10 seconds
+    current_time = time.time()
+    if current_time >= next_missile_time:
+        missiles.append(pygame.Vector2(WIDTH // 2, HEIGHT - 50))
+        next_missile_time += 10
+
+    # Homing missile movement for all missiles
+    for missile_pos in missiles:
+        direction = player_pos + pygame.Vector2(PLAYER_SIZE / 2, PLAYER_SIZE / 2) - missile_pos
+        if direction.length() != 0:
+            direction = direction.normalize() * random.uniform(MISSILE_SPEED, MISSILE_SPEED * 1.5)  # Randomize speed slightly
+        missile_pos += direction
 
     screen.fill(BLACK)
     draw_player(player_pos)
-    draw_missile(missile_pos)
+    for missile_pos in missiles:
+        draw_missile(missile_pos)
 
-    # Collision detection
-    if missile_pos.distance_to(player_pos + pygame.Vector2(PLAYER_SIZE / 2, PLAYER_SIZE / 2)) < PLAYER_SIZE / 2 + MISSILE_SIZE:
+    # Collision detection for all missiles
+    hit = False
+    for missile_pos in missiles:
+        if missile_pos.distance_to(player_pos + pygame.Vector2(PLAYER_SIZE / 2, PLAYER_SIZE / 2)) < PLAYER_SIZE / 2 + MISSILE_SIZE:
+            hit = True
+            break
+
+    if hit:
         text = font.render("Game Over", True, WHITE)
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
         pygame.display.flip()
