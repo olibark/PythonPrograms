@@ -6,13 +6,7 @@ This repository contains various experiments and sample programs.
 
 A simple Snake game is included under `HTML/snake`. Open `index.html` in a web browser to play.
 
-## Cleaning up tracked files
+## Hello World
 
-If you update `.gitignore` and want Git to stop tracking existing files that should now be ignored, run:
-
-```bash
-git rm -r --cached .
-```
-
-This removes the files from the repository while leaving them on disk. After running the command, commit the deletions.
+Hey gang welcome to my crappy programs...
 
