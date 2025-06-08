@@ -2,7 +2,7 @@ import os
 import requests
 
 # API endpoint for DeepSeek's public model hosted on Hugging Face
-API_URL = "https://api-inference.huggingface.co/models/deepseek-ai/deepseek-llm-7b-instruct"
+API_URL = "https://huggingface.co/deepseek-ai/DeepSeek-R1-0528"
 
 # Read the Hugging Face token from the environment, if provided
 HF_TOKEN = os.getenv("HF_TOKEN")
