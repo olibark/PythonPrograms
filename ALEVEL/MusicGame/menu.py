@@ -4,7 +4,7 @@ from user import User
 
 class Menu():
     @staticmethod
-    def printMenu(latestIDFile):
+    def printMenu():
         os.system('clear')
         print("1: Register")
         print("2: Display User Info")
