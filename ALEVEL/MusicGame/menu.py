@@ -3,18 +3,18 @@ import constants as CONST
 from user import User
 
 class Menu():
+    signedIn = False
+    signedInAs = None
     @staticmethod
     def clear():
         os.system('clear')
     @staticmethod
-    def printMenu(signedInAs):
-        try: 
-            if signedInAs is not None: 
-                print(signedInAs)
-        except:
-            signedInAs = None
-            print("Not signed in")
+    def printMenu():
         Menu.clear()
+        if Menu.signedIn: 
+            print(Menu.signedInAs)
+        else: 
+            print("Guest")
         print("1: Register")
         print("2: Sign In")
         print("3: Display User Names")
@@ -23,16 +23,35 @@ class Menu():
         if choice == 1:
             Menu.addUser()
         elif choice == 2:
-            signedInAs = Menu.signIn()
+            user = Menu.signIn()
+            if user:
+                Menu.signedIn = True
+                Menu.signedInAs = user
+            else:
+                print("Sign in failed.")
+                input()
         elif choice == 3:
             Menu.displayUsers()
         elif choice == 4:
-            Menu.displayHighScores()
+            Menu.displayHigh()
         else:
             print("Invalid option. Please try again.")
     @staticmethod
+    def displayHigh():
+        Menu.clear()
+        with open(CONST.userInfoFile, 'r') as file:
+            for line in file: 
+                if line.startswith("userName"):
+                    continue
+                else: 
+                    data = line.strip().split(',')
+                    userName = data[0]
+                    highScore = data[3]
+                    print(f"{userName}: {highScore}")
+            input()
+    @staticmethod
     def addUser():
-        userName = input("Enter your name: ")
+        userName = input("Enter your user: ")
         userID = User.getLatestID(CONST.latestIDFile) + 1
         with open(CONST.latestIDFile, 'w') as file:
             file.write(str(userID))
@@ -61,6 +80,7 @@ class Menu():
             password = input("Password: ")
             if User.checkPassword(username, password):
                 print(f"Welcome {username}")
+                signedIn = True
                 signedInAs = username
                 searching = False
                 print("You are now signed in.")
