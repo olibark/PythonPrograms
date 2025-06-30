@@ -5,7 +5,7 @@ import cv2
 app = Flask(__name__, static_folder='../../HTML')
 
 camera = Picamera2()
-camera.configure(camera.create_video_configuration(main={"format": "RGB888", "size": (640, 480)}))
+camera.configure(camera.create_video_configuration(main={"format": "RGB888", "size": (1000, 1000)}))
 camera.start()
 
 
