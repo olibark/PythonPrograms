@@ -1,5 +1,6 @@
-from flask  import Flask, Response
 from picamera2 import Picamera2
+from flask import Flask, Response, render_template
+
 import cv2
 
 running = True
@@ -24,10 +25,18 @@ def captureFrames():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frameBytes + b'\r\n')
         
+        
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+        
 @app.route('/video_feed')
 def videoFeed():
     return Response(captureFrames(), 
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+    
+    
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
