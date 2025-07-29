@@ -9,7 +9,7 @@ The `RasPi/camera/stream_server.py` script starts a small Flask server that
 provides an MJPEG stream from the Pi camera. The page `HTML/camera_feed.html`
 connects to this server and displays the live feed.
 
-### Usage
+### How to
 1. Install the required packages:
    ```bash
    sudo apt install python3-flask python3-opencv
